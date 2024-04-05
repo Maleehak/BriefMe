@@ -40,7 +40,6 @@ public class AudioToTextConverterImpl implements AudioToTextConverter {
                             .setEncoding(AudioEncoding.MP3)
                             .setSampleRateHertz(16000)
                             .setLanguageCode("en-US")
-                            .setEnableAutomaticPunctuation(true)
                             .build();
 
             String completeTranscript = "";
