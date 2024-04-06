@@ -40,6 +40,7 @@ public class AudioToTextConverterImpl implements AudioToTextConverter {
                             .setEncoding(AudioEncoding.MP3)
                             .setSampleRateHertz(16000)
                             .setLanguageCode("en-US")
+                            .setEnableAutomaticPunctuation(true)
                             .build();
 
             String completeTranscript = "";
@@ -67,6 +68,8 @@ public class AudioToTextConverterImpl implements AudioToTextConverter {
                     j++;
                 }
             }
+
+            // TODO: Delete the audio file after the text has been read
 
             log.info("Audio conversion to text completed. Transcript {}", completeTranscript);
             return completeTranscript;

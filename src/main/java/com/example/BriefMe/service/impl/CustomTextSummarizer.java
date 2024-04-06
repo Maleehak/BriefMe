@@ -2,12 +2,14 @@ package com.example.BriefMe.service.impl;
 
 import com.example.BriefMe.service.client.TextSummarizer;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.similarity.CosineSimilarity;
 
+@Slf4j
 public class CustomTextSummarizer implements TextSummarizer {
 
     public static final List<String> STOP_WORDS = Arrays.asList(
@@ -31,43 +33,86 @@ public class CustomTextSummarizer implements TextSummarizer {
             "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
     );
 
-    public String summarizeText(String text){
-        /* 1. Filter stop words from the text
-         * 2. Get frequency of remaining words
-         * 3. Sort words in order of decreasing frequency
-         */
-        if(text.equals("") || text.equals(" ") || text.equals("\n"))
-        {
+    public String summarizeText(String text) {
+
+        log.info("Performing text summarization.......");
+
+        int maxSummarySize = 4;
+
+        if (text.equals("") || text.equals(" ") || text.equals("\n")) {
             String msg = "Nothing to summarize...";
             return msg;
         }
-        List<String> filteredListOfWords = filterStopWords(text);
-        Map<String, Integer> wordsWithFrequency = getWordsWithFrequency(filteredListOfWords);
-        List<String> sortedWords = sortWordsInOrderOfDecreasingFrequency(wordsWithFrequency);
 
-        sortedWords.forEach(System.out::println);
+        // Split the original text into sentences
+        List<String> sentences = splitTextIntoSentences(text);
 
-        return null;
+        // Build the similarity matrix
+        double[][] similarityMatrix = buildSimilarityMatrix(sentences);
+
+        return "";
+    }
+
+    // Split text into sentences
+    private static List<String> splitTextIntoSentences(String text) {
+        return Arrays.asList(text.split("[.!?]\\s*"));
+    }
+
+    private double[][] buildSimilarityMatrix(List<String> sentences) {
+        int n = sentences.size();
+        double[][] similarityMatrix = new double[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j) {
+                    similarityMatrix[i][j] = calculateSimilarity(sentences.get(i), sentences.get(j));
+                }
+            }
+        }
+
+        return similarityMatrix;
+    }
+
+    private double calculateSimilarity(String sentence1, String sentence2) {
+        // TODO: Optimize it: Create map of (sentence, words)
+        List<String> wordsInSentence1 = filterStopWords(sentence1);
+        List<String> wordsInSentence2 = filterStopWords(sentence2);
+
+        // TODO: Optimize it: Create Hashmap of (sentence, (words, frequency))
+        Map<String, Integer> wordsInSentence1WithFrequency = calculateWordsFrequency(wordsInSentence1);
+        Map<String, Integer> wordsInSentence2WithFrequency = calculateWordsFrequency(wordsInSentence2);
+
+        // covert it to map of (CharSequence, integer) as required for calculating cosine similarity
+        Map<CharSequence, Integer> wordsInCharSequence1WithFrequency = convertToCharSequenceMap(wordsInSentence1WithFrequency);
+        Map<CharSequence, Integer> wordsInCharSequence2WithFrequency = convertToCharSequenceMap(wordsInSentence2WithFrequency);
+
+        // Calculate cosine similarity
+        CosineSimilarity cosineSimilarity = new CosineSimilarity();
+
+        return cosineSimilarity.cosineSimilarity(wordsInCharSequence1WithFrequency, wordsInCharSequence2WithFrequency);
+    }
+
+    private Map<CharSequence, Integer> convertToCharSequenceMap(Map<String, Integer> inputMap) {
+        Map<CharSequence, Integer> outputMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : inputMap.entrySet()) {
+            outputMap.put(entry.getKey(), entry.getValue().intValue());
+        }
+        return outputMap;
     }
 
     private List<String> filterStopWords(String text)
     {
-        /* Convert given text into list of words
-         * And filter out all the stop words from that list
-         */
+        // Convert given text into list of words and filter out all the stop words from that list
         List<String> words = Arrays.asList(text.split("\\s+"));
-
         return words.stream()
                 .filter(word -> !STOP_WORDS.contains(word.toLowerCase()))
                 .toList();
     }
 
-    private Map<String, Integer> getWordsWithFrequency(List<String> words)
+    private Map<String, Integer> calculateWordsFrequency(List<String> words)
     {
-        /* Split paragraph to list of individual words
-         * If a word appears multiple times in the map, increase it's count
-         * Else add the new word to the Map
-         */
+        // Split paragraph to list of individual words
+        // Split a word appears multiple times in the map, increase it's count else add the new word to the Map
         return words.stream()
                 .collect(Collectors.toMap(
                         word -> word,  // Extract word as key
@@ -75,16 +120,6 @@ public class CustomTextSummarizer implements TextSummarizer {
                         Integer::sum));
     }
 
-    private List<String> sortWordsInOrderOfDecreasingFrequency(Map<String, Integer> wordFrequency)
-    {
-        /* Sort map based on frequency in decreasing order and then return only words(without frequency)
-         */
-        return wordFrequency.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .flatMap(entry -> Stream.of(entry.getKey()))
-                .toList();
-    }
 
 
 }
