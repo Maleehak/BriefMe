@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>BriefMe</artifactId>
+	<artifactId>briefme</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BriefMe</name>
 	<description>Convert recorded meetings to MoMs and send them over email</description>
