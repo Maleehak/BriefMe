@@ -74,9 +74,9 @@
 
 	<distributionManagement>
 		<repository>
-			<id>github-maven-package-repo</id>
+			<id>github</id>
+			<name>GitHub OWNER Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/Maleehak/BriefMe</url>
-			<name>BriefMe</name>
 			<layout>default</layout>
 		</repository>
 	</distributionManagement>
