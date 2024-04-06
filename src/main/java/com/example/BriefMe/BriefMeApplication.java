@@ -8,7 +8,7 @@ public class BriefMeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BriefMeApplication.class, args);
-		
+
 		
 	}
 }

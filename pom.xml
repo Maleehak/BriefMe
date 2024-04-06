@@ -72,4 +72,13 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>github-maven-package-repo</id>
+			<url>https://maven.pkg.github.com/Maleehak/BriefMe</url>
+			<name>BriefMe</name>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
 </project>
