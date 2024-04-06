@@ -32,5 +32,4 @@ jobs:
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
-        USER_NAME: Maleehak
         ACCESS_TOKEN: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
