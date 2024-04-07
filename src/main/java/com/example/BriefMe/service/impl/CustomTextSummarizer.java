@@ -14,32 +14,12 @@ import org.apache.commons.text.similarity.CosineSimilarity;
 @Slf4j
 public class CustomTextSummarizer implements TextSummarizer {
 
-    public static final List<String> STOP_WORDS = Arrays.asList(
-            "a", "about", "above", "after", "again", "against", "all", "am", "an", "and",
-            "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being",
-            "below", "between", "both", "but", "by", "can't", "cannot", "could", "couldn't",
-            "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during",
-            "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have",
-            "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers",
-            "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've",
-            "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me",
-            "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on",
-            "once", "only", "or", "other", "ought", "our", "ours", "ourselves", "out", "over",
-            "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't",
-            "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them",
-            "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll",
-            "they're", "they've", "this", "those", "through", "to", "too", "under", "until",
-            "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were",
-            "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while",
-            "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you",
-            "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
-    );
+    private static final int MAX_ITERATIONS = 50;
+    private static final double DAMPING_FACTOR = 0.85; // Damping factor for TextRank
 
     public String generateSummary(String text, int numberOfLines) {
 
         log.info("Performing text summarization.......");
-
-        int maxSummarySize = 4;
 
         if (text.equals("") || text.equals(" ") || text.equals("\n")) {
             String msg = "Nothing to summarize...";
@@ -52,8 +32,11 @@ public class CustomTextSummarizer implements TextSummarizer {
         // Build the similarity matrix
         double[][] similarityMatrix = buildSimilarityMatrix(sentences);
 
+        // Perform text ranking
+        double[] scores = calculateTextRank(similarityMatrix);
+
         // Extract top sentences for summary
-        List<String> summarySentences = extractTopSentences(similarityMatrix,sentences, 3);
+        List<String> summarySentences = extractTopSentences(scores, sentences, numberOfLines);
 
         String summary = convertToBulletPoints(summarySentences);
 
@@ -101,20 +84,13 @@ public class CustomTextSummarizer implements TextSummarizer {
     }
 
     private Map<CharSequence, Integer> convertToCharSequenceMap(Map<String, Integer> inputMap) {
-        Map<CharSequence, Integer> outputMap = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : inputMap.entrySet()) {
-            outputMap.put(entry.getKey(), entry.getValue().intValue());
-        }
-        return outputMap;
+        return new HashMap<>(inputMap);
     }
 
     private List<String> filterStopWords(String text)
     {
         // Convert given text into list of words and filter out all the stop words from that list
-        List<String> words = Arrays.asList(text.split("\\s+"));
-        return words.stream()
-                .filter(word -> !STOP_WORDS.contains(word.toLowerCase()))
-                .toList();
+        return Arrays.asList(text.split("\\s+"));
     }
 
     private Map<String, Integer> calculateWordsFrequency(List<String> words)
@@ -128,42 +104,49 @@ public class CustomTextSummarizer implements TextSummarizer {
                         Integer::sum));
     }
 
+    private static double[] calculateTextRank(double[][] similarityMatrix) {
+        int n = similarityMatrix.length;
+        double[] scores = new double[n];
+        double[] prevScores = new double[n];
 
-    public static List<String> extractTopSentences(double[][] similarityMatrix, List<String> sentences, int numSentences) {
-        log.info("Extracting Top Sentences.......");
+        // Initialize scores with equal values
+        for (int i = 0; i < n; i++) {
+            scores[i] = 1.0 / n;
+        }
+
+        // Iterate TextRank algorithm
+        for (int iter = 0; iter < MAX_ITERATIONS; iter++) {
+            System.arraycopy(scores, 0, prevScores, 0, n);
+
+            for (int i = 0; i < n; i++) {
+                double score = 0.0;
+                for (int j = 0; j < n; j++) {
+                    if (i != j) {
+                        score += similarityMatrix[j][i] * prevScores[j];
+                    }
+                }
+                scores[i] = (1 - DAMPING_FACTOR) + DAMPING_FACTOR * score;
+            }
+        }
+        return scores;
+    }
+
+    private static List<String> extractTopSentences(double[] scores, List<String> sentences, int numberOfSentences) {
         List<String> topSentences = new ArrayList<>();
 
-        // Calculate sentence scores based on the sum of similarity scores
-        double[] sentenceScores = new double[similarityMatrix.length];
-        for (int i = 0; i < similarityMatrix.length; i++) {
-            double score = 0.0;
-            for (int j = 0; j < similarityMatrix[i].length; j++) {
-                score += similarityMatrix[i][j];
-            }
-            sentenceScores[i] = score;
+        for (int i = 0; i < numberOfSentences; i++) {
+            int topIndex = findMaxIndex(scores);
+            topSentences.add(sentences.get(topIndex));
+            scores[topIndex] = Double.MIN_VALUE; // Mark as visited
         }
-
-        // Rank sentences based on scores
-        List<Integer> rankedIndices = rankSentences(sentenceScores);
-
-        // Extract top sentences
-        for (int i = 0; i < Math.min(numSentences, rankedIndices.size()); i++) {
-            int index = rankedIndices.get(i);
-            topSentences.add(sentences.get(index));
-        }
-
         return topSentences;
     }
 
-    public static List<Integer> rankSentences(double[] scores) {
-        log.info("Ranking sentences.......");
-        List<Integer> rankedIndices = new ArrayList<>();
-        // Simple ranking by sorting indices based on scores
-        for (int i = 0; i < scores.length; i++) {
-            rankedIndices.add(i);
-        }
-        rankedIndices.sort((i1, i2) -> Double.compare(scores[i2], scores[i1])); // Sort in descending order
-        return rankedIndices;
+    private static int findMaxIndex(double[] arr) {
+
+        return IntStream.range(0, arr.length)
+                .reduce((i, j) -> arr[i] > arr[j] ? i : j)
+                .orElse(-1);
     }
 
     public static String convertToBulletPoints(List<String> sentences) {
@@ -173,6 +156,5 @@ public class CustomTextSummarizer implements TextSummarizer {
                 .mapToObj(i -> (i + 1) + ". " + sentences.get(i))
                 .collect(Collectors.joining("\n"));
     }
-
 
 }

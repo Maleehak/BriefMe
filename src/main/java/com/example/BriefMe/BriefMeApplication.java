@@ -19,7 +19,7 @@ public class BriefMeApplication {
 		SpringApplication.run(BriefMeApplication.class, args);
 
 		AudioExtractor audioExtractor = new YoutubeAudioExtractorImpl();
-		String audioFile = audioExtractor.extractAudio("https://www.youtube.com/watch?v=mCq8-xTH7jA");
+		String audioFile = audioExtractor.extractAudio("https://www.youtube.com/watch?v=Fkd9TWUtFm0");
 
 		AudioToTextConverter audioToTextConverter = new AudioToTextConverterImpl();
 		String text = audioToTextConverter.covertAudioToText(audioFile);
