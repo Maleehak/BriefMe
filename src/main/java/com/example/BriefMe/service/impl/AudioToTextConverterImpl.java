@@ -71,7 +71,7 @@ public class AudioToTextConverterImpl implements AudioToTextConverter {
 
             // TODO: Delete the audio file after the text has been read
 
-            log.info("Audio conversion to text completed. Transcript {}", completeTranscript);
+            log.info("Audio conversion to text completed. Transcript: {}", completeTranscript);
             return completeTranscript;
         }
     }

@@ -49,7 +49,6 @@ public class CustomTextSummarizer implements TextSummarizer {
 
         // Build the similarity matrix
         double[][] similarityMatrix = buildSimilarityMatrix(sentences);
-
         return "";
     }
 
