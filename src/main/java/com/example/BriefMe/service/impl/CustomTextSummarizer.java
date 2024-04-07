@@ -1,11 +1,13 @@
 package com.example.BriefMe.service.impl;
 
 import com.example.BriefMe.service.client.TextSummarizer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.CosineSimilarity;
 
@@ -33,7 +35,7 @@ public class CustomTextSummarizer implements TextSummarizer {
             "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
     );
 
-    public String summarizeText(String text) {
+    public String generateSummary(String text, int numberOfLines) {
 
         log.info("Performing text summarization.......");
 
@@ -49,7 +51,13 @@ public class CustomTextSummarizer implements TextSummarizer {
 
         // Build the similarity matrix
         double[][] similarityMatrix = buildSimilarityMatrix(sentences);
-        return "";
+
+        // Extract top sentences for summary
+        List<String> summarySentences = extractTopSentences(similarityMatrix,sentences, 3);
+
+        String summary = convertToBulletPoints(summarySentences);
+
+        return summary;
     }
 
     // Split text into sentences
@@ -58,6 +66,7 @@ public class CustomTextSummarizer implements TextSummarizer {
     }
 
     private double[][] buildSimilarityMatrix(List<String> sentences) {
+        log.info("Calculating Similarity.......");
         int n = sentences.size();
         double[][] similarityMatrix = new double[n][n];
 
@@ -119,6 +128,51 @@ public class CustomTextSummarizer implements TextSummarizer {
                         Integer::sum));
     }
 
+
+    public static List<String> extractTopSentences(double[][] similarityMatrix, List<String> sentences, int numSentences) {
+        log.info("Extracting Top Sentences.......");
+        List<String> topSentences = new ArrayList<>();
+
+        // Calculate sentence scores based on the sum of similarity scores
+        double[] sentenceScores = new double[similarityMatrix.length];
+        for (int i = 0; i < similarityMatrix.length; i++) {
+            double score = 0.0;
+            for (int j = 0; j < similarityMatrix[i].length; j++) {
+                score += similarityMatrix[i][j];
+            }
+            sentenceScores[i] = score;
+        }
+
+        // Rank sentences based on scores
+        List<Integer> rankedIndices = rankSentences(sentenceScores);
+
+        // Extract top sentences
+        for (int i = 0; i < Math.min(numSentences, rankedIndices.size()); i++) {
+            int index = rankedIndices.get(i);
+            topSentences.add(sentences.get(index));
+        }
+
+        return topSentences;
+    }
+
+    public static List<Integer> rankSentences(double[] scores) {
+        log.info("Ranking sentences.......");
+        List<Integer> rankedIndices = new ArrayList<>();
+        // Simple ranking by sorting indices based on scores
+        for (int i = 0; i < scores.length; i++) {
+            rankedIndices.add(i);
+        }
+        rankedIndices.sort((i1, i2) -> Double.compare(scores[i2], scores[i1])); // Sort in descending order
+        return rankedIndices;
+    }
+
+    public static String convertToBulletPoints(List<String> sentences) {
+        log.info("Creating bullet points.......");
+        // Using Java streams to map each sentence with a bullet point
+        return IntStream.range(0, sentences.size())
+                .mapToObj(i -> (i + 1) + ". " + sentences.get(i))
+                .collect(Collectors.joining("\n"));
+    }
 
 
 }
