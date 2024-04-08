@@ -1,7 +1,7 @@
 package com.example.BriefMe.service.impl;
 
 import com.example.BriefMe.service.client.AudioToTextConverter;
-import com.example.BriefMe.service.util.SpeechRecognitionTask;
+import com.example.BriefMe.util.SpeechRecognitionTask;
 import com.google.cloud.speech.v1.SpeechClient;
 import java.io.IOException;
 import java.nio.file.Files;

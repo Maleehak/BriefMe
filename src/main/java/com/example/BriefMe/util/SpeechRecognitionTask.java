@@ -1,4 +1,4 @@
-package com.example.BriefMe.service.util;
+package com.example.BriefMe.util;
 
 import com.google.cloud.speech.v1.RecognitionAudio;
 import com.google.cloud.speech.v1.RecognitionConfig;
