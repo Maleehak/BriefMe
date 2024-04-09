@@ -1,1 +1,3 @@
-.mvn/
+.mvn/wrapper
+backend/target/
+.idea/
