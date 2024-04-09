@@ -29,6 +29,6 @@ jobs:
       run: mvn -B -f backend/pom.xml package
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s backend/settings.xml
+      run: mvn deploy -f backend/pom.xml -s backend/settings.xml
       env:
         GITHUB_TOKEN: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
