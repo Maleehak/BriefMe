@@ -2,10 +2,10 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  background-color: #fafafa; /* Replace with your desired color */
 }
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
