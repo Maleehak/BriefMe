@@ -1,3 +1,4 @@
 .mvn/wrapper
 backend/target/
 .idea/
+google-api-credentials.json

@@ -2,24 +2,37 @@ package com.example.BriefMe.service.impl;
 
 import com.example.BriefMe.service.client.AudioToTextConverter;
 import com.example.BriefMe.util.SpeechRecognitionTask;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.speech.v1.SpeechClient;
+import com.google.cloud.speech.v1.SpeechSettings;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class AudioToTextConverterImpl implements AudioToTextConverter {
 
+    @Value("${google.api.credentials.location}")
+    private String credentialsPath;
+
     public String covertAudioToText(String audioFile){
 
-        try (SpeechClient speechClient = SpeechClient.create()) {
+        try{
+            CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(
+                    ServiceAccountCredentials.fromStream(new FileInputStream(credentialsPath)));
+
+            SpeechSettings settings = SpeechSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+            SpeechClient speechClient = SpeechClient.create(settings);
 
             log.info("Loading the audio file into memory...");
 

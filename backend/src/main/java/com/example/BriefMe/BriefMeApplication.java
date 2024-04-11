@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 public class BriefMeApplication {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args){
 		SpringApplication.run(BriefMeApplication.class, args);
 	}
 }
