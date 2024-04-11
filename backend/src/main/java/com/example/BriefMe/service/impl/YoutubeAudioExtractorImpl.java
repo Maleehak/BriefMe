@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
+@Primary
 public class YoutubeAudioExtractorImpl implements AudioExtractor {
 
     public static final String OUTPUT_FILE = "output-";
@@ -15,7 +19,7 @@ public class YoutubeAudioExtractorImpl implements AudioExtractor {
     public static final String MP_3 = "mp3";
 
     @Override
-    public String extractAudio(String inputVideoFile) throws IOException {
+    public String extractAudio(String inputVideoFile) {
         String outputFile = OUTPUT_FILE + UUID.randomUUID() + DOT;
         String defaultSearch = "ytsearch";
         String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";

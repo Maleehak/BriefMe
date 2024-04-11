@@ -11,17 +11,19 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class AudioToTextConverterImpl implements AudioToTextConverter {
 
-    public String covertAudioToText(String audioFile) throws IOException {
+    public String covertAudioToText(String audioFile){
 
         try (SpeechClient speechClient = SpeechClient.create()) {
 
             log.info("Loading the audio file into memory...");
 
-            Path path = Paths.get(audioFile);
+            Path path = Path.of(audioFile);
             byte[] data = Files.readAllBytes(path);
             log.info("Audio file loaded...");
 
@@ -52,8 +54,14 @@ public class AudioToTextConverterImpl implements AudioToTextConverter {
 
             executor.shutdown();
 
-            log.info("Audio conversion to text completed. Transcript: {}", completeTranscript);
+            log.info("Audio conversion to text completed");
+
+            Files.deleteIfExists(path);
+
             return completeTranscript.toString();
+        } catch (IOException e) {
+            log.error("Exception occurred with audio to text conversion: {}", e.getMessage());
+            return "";
         }
     }
 }

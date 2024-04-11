@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.similarity.CosineSimilarity;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class CustomTextSummarizer implements TextSummarizer {
 
     private static final int MAX_ITERATIONS = 50;

@@ -17,18 +17,5 @@ public class BriefMeApplication {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(BriefMeApplication.class, args);
-
-		AudioExtractor audioExtractor = new YoutubeAudioExtractorImpl();
-		String audioFile = audioExtractor.extractAudio("https://www.youtube.com/watch?v=Fkd9TWUtFm0");
-
-		AudioToTextConverter audioToTextConverter = new AudioToTextConverterImpl();
-		String text = audioToTextConverter.covertAudioToText(audioFile);
-
-		TextSummarizer textSummarizer = new CustomTextSummarizer();
-		int numberOfLines = 5;
-		String summary = textSummarizer.generateSummary(text, numberOfLines);
-
-		log.info("Text summarization completed...");
-		log.info("Summary: {}", summary);
 	}
 }
