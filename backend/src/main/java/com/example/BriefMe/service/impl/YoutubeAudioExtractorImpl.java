@@ -26,8 +26,9 @@ public class YoutubeAudioExtractorImpl implements AudioExtractor {
 
         try {
             String[] command = {
-                    "youtube-dl",
+                    "yt-dlp",
                     "--extract-audio",
+                    "--verbose",
                     "--default-search",
                     defaultSearch,
                     "--audio-format",
