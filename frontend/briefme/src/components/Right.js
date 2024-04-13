@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons';
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
+import axios from 'axios';
 
 const Right = () => {
   const [inputValue, setInputValue] = useState('');
-  const [outputValue, setOutputValue] = useState('');
+  const [summary, setSummary] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (event) => {
       // Handle changes in the input field
@@ -13,12 +17,28 @@ const Right = () => {
 
   const handleClick = () => {
     console.log('Button clicked!');
-    // Add your custom logic here
-    setOutputValue(inputValue);
+    fetchSummary()
   };
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(inputValue);
+    navigator.clipboard.writeText(summary);
+  };
+
+  const fetchSummary = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:8080/api/get-summary', {
+        params: {
+          video: inputValue,
+          lines: 6
+        },
+      }); 
+      setSummary(response.data);
+    } catch (error) {
+      setSummary("Unable to process request at the momemt. " +error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,9 +55,14 @@ const Right = () => {
           Click Me
         </button>
       </div>
+      {loading && 
+        <Box sx={{ width: '82%', color: 'orange' }}>
+          <LinearProgress color="inherit" />
+        </Box>
+      }
       <textarea
         type="text"
-        value={outputValue}
+        value={summary}
         onChange={handleChange}
         className="summary-textbox" 
       />
