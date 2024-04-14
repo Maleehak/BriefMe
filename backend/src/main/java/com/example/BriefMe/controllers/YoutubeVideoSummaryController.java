@@ -1,6 +1,6 @@
 package com.example.BriefMe.controllers;
 
-import com.example.BriefMe.service.client.YoutubeVideoSummaryService;
+import com.example.BriefMe.service.YoutubeVideoSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
