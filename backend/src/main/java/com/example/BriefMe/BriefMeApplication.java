@@ -13,8 +13,5 @@ public class BriefMeApplication {
 	public static void main(String[] args) throws IOException {
 
 		SpringApplication.run(BriefMeApplication.class, args);
-		PredictTextSummarizationSample predictTextSummarization = new PredictTextSummarizationSample();
-		predictTextSummarization.predict();
-
 	}
 }
