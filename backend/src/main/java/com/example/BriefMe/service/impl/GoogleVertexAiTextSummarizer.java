@@ -1,16 +1,14 @@
 package com.example.BriefMe.service.impl;
 
 import com.example.BriefMe.properties.VertexAIProperties;
-import com.example.BriefMe.request.VertexAIParameters;
-import com.example.BriefMe.request.VertexAIData;
+import com.example.BriefMe.data.request.VertexAIParameters;
+import com.example.BriefMe.data.request.VertexAIData;
 import com.example.BriefMe.service.client.TextSummarizer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
-import javax.print.DocFlavor.STRING;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import com.google.cloud.aiplatform.v1beta1.EndpointName;
 import com.google.cloud.aiplatform.v1beta1.PredictResponse;
 import com.google.cloud.aiplatform.v1beta1.PredictionServiceClient;
@@ -20,12 +18,10 @@ import com.google.protobuf.util.JsonFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@Service
+@Component
 @Slf4j
-public class PredictTextSummarizationSample implements TextSummarizer {
+public class GoogleVertexAiTextSummarizer implements TextSummarizer {
 
-    //TODO: Set vaules in application.properties
     @Autowired
     VertexAIProperties vertexAIProperties;
     @Override
@@ -41,8 +37,7 @@ public class PredictTextSummarizationSample implements TextSummarizer {
                             .build();
 
             // Initialize client
-            try (PredictionServiceClient predictionServiceClient =
-                    PredictionServiceClient.create(predictionServiceSettings)) {
+            try (PredictionServiceClient predictionServiceClient = PredictionServiceClient.create(predictionServiceSettings)) {
                 final EndpointName endpointName =
                         EndpointName.ofProjectLocationPublisherModelName(
                                 vertexAIProperties.getProject(),
@@ -61,23 +56,20 @@ public class PredictTextSummarizationSample implements TextSummarizer {
                 JsonFormat.parser().merge(parameters, parameterValueBuilder);
                 Value parameterValue = parameterValueBuilder.build();
 
-                PredictResponse predictResponse =
-                        predictionServiceClient.predict(endpointName, instances, parameterValue);
-
-                //TODO: Fetch and return data
-                System.out.println("Predict Response");
-                System.out.println(predictResponse);
+                PredictResponse predictResponse = predictionServiceClient.predict(endpointName, instances, parameterValue);
+                return predictResponse.getPredictions(0).getStructValue().getFieldsOrThrow("content").getStringValue();
             }
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error("Unable to get predictions from Google Vertex AI. {}", e.getMessage());
+            return "Nothing to summarize";
         }
-        return "Nothing to summarize";
+
     }
 
     private String createPromptString(String text, int numberOfLines){
         try{
             String prompt = "Provide a short summary in "+ numberOfLines +" numeric bullet points:" + text;
+            log.info("Prompt: {}", prompt);
             VertexAIData vertexAIData = new VertexAIData(prompt);
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(vertexAIData);

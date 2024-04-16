@@ -21,4 +21,11 @@ public class YoutubeVideoSummaryController {
         return ResponseEntity.ok(summary);
     }
 
+
+    @GetMapping("/get-summary/v2")
+    public ResponseEntity<String> generateSummaryFromSubtitles(@RequestParam String video, @RequestParam int lines){
+        String summary = youtubeVideoSummaryService.generateSummaryFromSubtitles(video, lines);
+        return ResponseEntity.ok(summary);
+    }
+
 }

@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +33,7 @@ public class YoutubeVideoToTextConverterImpl implements VideoToTextConverter {
 
         try {
             String[] command = {
-                    "yt-dlp",
+                    "/opt/homebrew/bin/yt-dlp",
                     "--skip-download",
                     "--write-subs",
                     "--write-auto-subs",
@@ -105,7 +107,8 @@ public class YoutubeVideoToTextConverterImpl implements VideoToTextConverter {
                     }
                 }
             }
-            log.info("Extracted text: {} ", subtitles);
+            log.info("Subtitles extracted...");
+            Files.deleteIfExists(Path.of(filePath));
 
             return subtitles.toString();
 

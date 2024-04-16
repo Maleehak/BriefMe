@@ -1,6 +1,5 @@
 package com.example.BriefMe;
 
-import com.example.BriefMe.service.impl.PredictTextSummarizationSample;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;

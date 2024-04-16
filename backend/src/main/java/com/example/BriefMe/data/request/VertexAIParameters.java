@@ -1,4 +1,4 @@
-package com.example.BriefMe.request;
+package com.example.BriefMe.data.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
