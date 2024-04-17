@@ -10,6 +10,8 @@ import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +37,10 @@ public class GoogleVertexAiTextSummarizer implements TextSummarizer {
     public String generateSummary(String text, int numberOfLines) {
         try{
 
-            // create credentials using google service account json
-            List<String> scopes = Arrays.asList("https://www.googleapis.com/auth/cloud-platform",
-                    "https://www.googleapis.com/auth/cloud-platform.read-only");
-
-
-            ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) ServiceAccountCredentials
-                    .fromStream(new FileInputStream(credentialsPath))
-                    .createScoped(scopes);
-
-            CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(serviceAccountCredentials);
-
+            CredentialsProvider  credentialsProvider = createCredentials();
 
             String endpoint = String.format("%s-aiplatform.googleapis.com:443", vertexAIProperties.getLocation());
+
             PredictionServiceSettings predictionServiceSettings =
                     PredictionServiceSettings.newBuilder()
                             .setEndpoint(endpoint)
@@ -88,10 +81,26 @@ public class GoogleVertexAiTextSummarizer implements TextSummarizer {
 
     }
 
+    private CredentialsProvider createCredentials() {
+        try{
+            List<String> scopes = Arrays.asList("https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-platform.read-only");
+
+            ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) ServiceAccountCredentials
+                    .fromStream(new FileInputStream(credentialsPath))
+                    .createScoped(scopes);
+
+            return FixedCredentialsProvider.create(serviceAccountCredentials);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private String createPromptString(String text, int numberOfLines){
         try{
             String prompt = "Provide a short summary in "+ numberOfLines +" numeric bullet points:" + text;
-            log.info("Prompt: {}", prompt);
             VertexAIData vertexAIData = new VertexAIData(prompt);
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.writeValueAsString(vertexAIData);

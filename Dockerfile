@@ -1,5 +1,7 @@
 FROM openjdk:17-jdk-slim
 
+ARG GOOGLE_FILE_PASSWORD
+
 RUN apt-get update && apt-get install -y \
     python3 \
     wget \
@@ -13,7 +15,7 @@ RUN wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /us
 COPY backend/target/briefme-0.0.1-SNAPSHOT.jar /app/briefme-0.0.1-SNAPSHOT.jar
 COPY google-api-credentials.json.enc  /app/google-api-credentials.json.enc
 
-RUN openssl enc -d -aes-256-cbc -in /app/google-api-credentials.json.enc -out /app/google-api-credentials.json -pass pass:'It is raining 99'
+RUN openssl enc -d -aes-256-cbc -in /app/google-api-credentials.json.enc -out /app/google-api-credentials.json -pbkdf2 -k "${GOOGLE_FILE_PASSWORD}"
 
 WORKDIR /app
 
