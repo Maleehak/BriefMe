@@ -20,7 +20,7 @@ public class Mp4AudioExtractorImpl implements AudioExtractor {
     @Override
     public String extractAudio(String inputVideoFile) {
         try{
-            FFmpeg ffmpeg = new FFmpeg("/opt/homebrew/bin/ffmpeg");
+            FFmpeg ffmpeg = new FFmpeg("ffmpeg");
             FFprobe ffprobe = new FFprobe();
 
             String outputFile = OUTPUT_FILE + UUID.randomUUID() + DOT + MP_3;

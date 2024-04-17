@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class AudioToTextConverterImpl implements AudioToTextConverter {
+public class GoogleAudioToTextConverterImpl implements AudioToTextConverter {
 
     @Value("${google.api.credentials.location}")
     private String credentialsPath;
