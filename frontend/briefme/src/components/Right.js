@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard } from '@fortawesome/free-solid-svg-icons';
 import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 import axios from 'axios';
+import SelectBox from './SelectBox';
 
 const Right = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputUrl, setInputUrl] = useState('');
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
+  const [numberOfLines, setNumberOfLines] = useState(4);
 
   const handleChange = (event) => {
       // Handle changes in the input field
-    setInputValue(event.target.value);
+      setInputUrl(event.target.value);
   };
 
   const handleClick = () => {
@@ -20,17 +20,13 @@ const Right = () => {
     fetchSummary()
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(summary);
-  };
-
   const fetchSummary = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8080/api/get-summary', {
+      const response = await axios.get('https://brief-me-backend-app-26vtalgjia-el.a.run.app/api/get-summary/v2', {
         params: {
-          video: inputValue,
-          lines: 6
+          video: inputUrl,
+          lines: numberOfLines
         },
       }); 
       setSummary(response.data);
@@ -41,20 +37,29 @@ const Right = () => {
     }
   };
 
+  const handleSelect = (value) => {
+    setNumberOfLines(value);
+  };
+
   return (
     <div className="vertical-component-right">
       <input
         type="text"
-        value={inputValue}
+        value={inputUrl}
         onChange={handleChange}
         placeholder="Enter url here"
         className="url-input-textbox" 
       />
+      <div className="selection-container">
+          <p className="selection-text">No. of lines: </p>
+          <SelectBox onSelect={handleSelect} />
+      </div>
       <div style={{ display: "flex", width: "83%" }}>
         <button onClick={handleClick} className="submit-btn">
-          Click Me
+          Summarize
         </button>
       </div>
+    
       {loading && 
         <Box sx={{ width: '82%', color: 'orange' }}>
           <LinearProgress color="inherit" />
@@ -65,17 +70,6 @@ const Right = () => {
         value={summary}
         onChange={handleChange}
         className="summary-textbox" 
-      />
-      <FontAwesomeIcon
-          icon={faClipboard}
-          style={{
-            position: 'absolute',
-            right: '8%',
-            top: '39%',
-            transform: 'translateY(-50%)',
-            cursor: 'pointer'
-          }}
-          onClick={handleCopy}
       />
     </div>
   );

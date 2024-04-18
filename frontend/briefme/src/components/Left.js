@@ -13,7 +13,7 @@ const Left = () => {
         Brief Me
       </div>
       <div className="description">
-        Just enter the url of any Youtube video and get summary within few minutes.
+        Just enter the url of any Youtube video and get summary within few seconds.
       </div>
       <img src="image.png" alt="Left Section" className="image"/>
 
