@@ -5,6 +5,11 @@ on:
     branches:
       - main
       
+env:
+  PROJECT_ID: brief-me-backend
+  REGION: northamerica-northeast1
+  GAR_LOCATION: northamerica-northeast1-docker.pkg.dev/brief-me-backend/brief-me-backend:1.0
+      
 jobs:
   build:
 
@@ -34,16 +39,16 @@ jobs:
     - name: Build with Maven
       run: mvn -B -f backend/pom.xml package
 
-    - name: Configure Docker
-      run: gcloud auth configure-docker
+    - name: Configure Docker Auth
+      run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
 
     - name: Build Docker image
-      run: |
-        docker build --build-arg "GOOGLE_FILE_PASSWORD=${{ secrets.GOOGLE_FILE_PASSWORD }}" -t gcr.io/brief-me-backend/brief-me-backend:1.0 .
-        docker push gcr.io/brief-me-backend/brief-me-backend:1.0
-    
+      run: docker build --build-arg "GOOGLE_FILE_PASSWORD=${{ secrets.GOOGLE_FILE_PASSWORD }}" -t ${{ env.GAR_LOCATION }} .
+        
+    - name: Push image
+      run: docker push ${{ env.GAR_LOCATION }}
+      
     - name: Deploy to GCP
-      run: |
-          gcloud run deploy brief-me-backend-app --image gcr.io/brief-me-backend/brief-me-backend:1.0 --platform managed
+      run: gcloud run deploy brief-me-backend-app --image gcr.io/brief-me-backend/brief-me-backend:1.0 --platform managed
       env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}    
