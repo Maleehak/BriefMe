@@ -7,8 +7,8 @@ on:
       
 env:
   PROJECT_ID: brief-me-backend
-  REGION: northamerica-northeast1
-  IMAGE_NAME: northamerica-northeast1-docker.pkg.dev/brief-me-backend/brief-me-repo/brief-me-backend:1.0
+  REGION: asia-south1
+  IMAGE_NAME: asia-south1-docker.pkg.dev/brief-me-backend/brief-me/brief-me-backend:1.0
       
 jobs:
   build:
