@@ -22,7 +22,7 @@ const Left = () => {
            View on Github
         </a>
         <div class="divider">|</div>
-        <a href="https://maleehak.github.io/" onClick={handleExternalLinkClick}>
+        <a href="https://www.linkedin.com/in/maleehak/" onClick={handleExternalLinkClick}>
            About the Author
         </a>
       
