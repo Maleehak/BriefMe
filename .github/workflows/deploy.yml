@@ -36,7 +36,7 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build --build-args GOOGLE_FILE_PASSWORD=$GOOGLE_FILE_PASSWORD -t gcr.io/brief-me-backend/brief-me-backend:1.0 -f docker/Dockerfile .
+        docker build --build-arg GOOGLE_FILE_PASSWORD=$GOOGLE_FILE_PASSWORD -t gcr.io/brief-me-backend/brief-me-backend:1.0 .
         docker push gcr.io/brief-me-backend/brief-me-backend:1.0
     
     - name: Deploy to GCP
