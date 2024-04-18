@@ -49,6 +49,6 @@ jobs:
       run: docker push ${{ env.IMAGE_NAME }}
       
     - name: Deploy to GCP
-      run: gcloud run deploy brief-me-backend-app --image ${{ env.IMAGE_NAME }} --platform managed
+      run: gcloud run deploy brief-me-backend-app --image ${{ env.IMAGE_NAME }} --platform managed --region ${{ env.REGION }}
       env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}    
