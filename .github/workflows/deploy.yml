@@ -1,0 +1,46 @@
+name: Deploy backend to GCP
+
+on:
+  push:
+    branches:
+      - main
+      
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        server-id: github
+
+    - name: Build with Maven
+      run: mvn -B -f backend/pom.xml package
+        
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'    
+      
+    - name: Build with Maven
+      run: mvn -B -f backend/pom.xml package
+
+    - name: Configure Docker
+      run: gcloud auth configure-docker
+
+    - name: Build Docker image
+      run: |
+        docker build --build-args GOOGLE_FILE_PASSWORD=$GOOGLE_FILE_PASSWORD -t gcr.io/brief-me-backend/brief-me-backend:1.0 -f docker/Dockerfile .
+        docker push gcr.io/brief-me-backend/brief-me-backend:1.0
+    
+    - name: Deploy to GCP
+      run: |
+          gcloud run deploy brief-me-backend-app --image gcr.io/brief-me-backend/brief-me-backend:1.0 --platform managed
+      env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}    
