@@ -36,6 +36,8 @@ This is the experimental project to utilize the existing/custom tools to extract
         - Accurately summarizes the average size videos generation within 2-4s!
     * Disadvantage:
         - Since it relies on subtitles, if the video does not contains the subtitles, this method fails
+     
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## Features
