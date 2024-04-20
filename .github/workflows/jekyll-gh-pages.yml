@@ -28,3 +28,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
+          publish_dir: frontend/briefme
