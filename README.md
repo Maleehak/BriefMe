@@ -1,6 +1,3 @@
-
-
-<!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -47,9 +44,6 @@ This is the experimental project to utilize the existing/custom tools to extract
         - Accurately summarizes the average size videos generation within 2-4s!
     * Disadvantage:
         - Since it relies on subtitles, if the video does not contains the subtitles, this method fails
-     
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 ## Features
 * Youtube video to audio converter using Yt-Dlp
@@ -65,12 +59,10 @@ This is the experimental project to utilize the existing/custom tools to extract
 * Secrets are managed using Github Action Secrets
 * Google service account credentials are encrypted 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 <img height="50" src="https://user-images.githubusercontent.com/25181517/117201156-9a724800-adec-11eb-9a9d-3cd0f67da4bc.png">  <img height="50" src="https://user-images.githubusercontent.com/25181517/183891303-41f257f8-6b3d-487c-aa56-c497b880d0fb.png"><img height="50" src="https://user-images.githubusercontent.com/25181517/117207242-07d5a700-adf4-11eb-975e-be04e62b984b.png"> <img height="50" src="https://user-images.githubusercontent.com/25181517/183897015-94a058a6-b86e-4e42-a37f-bf92061753e5.png"> <img height="50" src="https://user-images.githubusercontent.com/25181517/183911547-990692bc-8411-4878-99a0-43506cdb69cf.png"> <img height="50" src="https://user-images.githubusercontent.com/25181517/117207330-263ba280-adf4-11eb-9b97-0ac5b40bc3be.png"> <img height="50" src="https://user-images.githubusercontent.com/25181517/183868728-b2e11072-00a5-47e2-8a4e-4ebbb2b8c554.png"> 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -110,8 +102,6 @@ _Below is an example of how you can setup the project locally._
    ```
  2. Point the application to local backend server to call the APIs  
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -126,13 +116,9 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- LICENSE -->
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
