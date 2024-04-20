@@ -19,16 +19,12 @@ jobs:
           node-version: "18.16.1"
 
       - name: Install 🔧
-        run: npm install
-        working-directory: frontend/briefme 
+        run: npm --prefix ./frontend/briefme install
 
       - name: Build
-        run: npm run build 
-        working-directory: frontend/briefme 
+        run: npm run build --prefix ./frontend/briefme
         
       - name: Deploy to GH Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
-          BRANCH: main
-          FOLDER: frontend/briefme/build
