@@ -56,7 +56,7 @@ This is the experimental project to utilize the existing/custom tools to extract
 * Youtube video subtitles extracting using Yt-Dlp
 * Text Summarization using Google Vertex AI
 * Containerized Java Backend application using Docker
-* Fully CI/CD backend pipeline using Github Actions
+* Fully configured CI/CD pipeline for backend and frontend application using Github Actions
 * Containerized Backend is deployed to Google Clound Run
 * React Frontend is deployed on Github Pages
 * Secrets are managed using Github Action Secrets
