@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Brief Me",
+  "name": "Software designed to summarise the content of Youtube video within few seconds",
   "icons": [
     {
       "src": "favicon.ico",
