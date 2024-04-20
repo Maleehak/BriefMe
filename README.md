@@ -6,7 +6,17 @@
   <ol>
     <li><a href="#quick-demo">Quick Demo</a></li>
     <li><a href="#about-the-project">About The Project</a></li>
-    <li><a href="#installation">Features</a></li>
+    <li><a href="#features">Features</a></li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li>
+          <a href="#installation-guide">Installation guide</a>
+          <ul><li><a href="#backend">Backend</a></li></ul>
+          <ul><li><a href="#backend">Frontend</a></li></ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
   </ol>
@@ -56,6 +66,45 @@ This is the experimental project to utilize the existing/custom tools to extract
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- GETTING STARTED -->
+## Getting Started
+_Below is an example of how you can setup the project locally._
+
+### Installation guide
+
+#### Backend
+1. Install and setup Java 11 on your system
+2. For using the `yt-dlb` package, we need to have Python and Ffmpeg. Use the below command to install these dependencies:
+   ```sh
+   apt-get install -y python3 wget curl ffmpeg
+   ```
+4. Run the below command to install `yt-dlb` or use the [offical guide](https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#installation) for installation :
+   ```sh
+   wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
+   ```
+5. Clone the repo
+   ```sh
+   git clone https://github.com/Maleehak/BriefMe.git
+   ```
+6. Create a Google Service account using [this](https://cloud.google.com/iam/docs/service-accounts-create) guide and grant it the following permissions to use Google Vertex AI or use official g [Speech to text](https://cloud.google.com/speech-to-text/docs/transcribe-client-libraries#client-libraries-usage-java) and [Vertex AI](https://cloud.google.com/vertex-ai/docs/start/cloud-environment) to learn how to create and use local credentials:
+   1. Vertex AI user
+   2. Vertex AI Admin
+   3. Editor
+8. Enable [Google Speech to Text](https://cloud.google.com/speech-to-text?hl=en) for Speech to text conversion and [Vertex AI](https://cloud.google.com/vertex-ai/docs) for summary generation
+9. Run the below command to start up the backend application:
+   ```sh
+   mvn clean install
+   mvn spring-boot:run
+   ```
+   
+#### Frontend
+1. Install NPM packages
+   ```sh
+   npm install
+   ```
+ 2. Point the application to local backend server to call the APIs  
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
 ## Contributing
