@@ -20,8 +20,10 @@
   </ol>
 </details>
 
+
 ## Quick Demo
 <img src="https://github.com/Maleehak/BriefMe/blob/main/frontend/briefme/public/Screen%20Recording%202024-04-19%20at%208.07.21%20PM%20(1).gif">
+
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -44,6 +46,7 @@ This is the experimental project to utilize the existing/custom tools to extract
         - Accurately summarizes the average size videos generation within 2-4s!
     * Disadvantage:
         - Since it relies on subtitles, if the video does not contains the subtitles, this method fails
+
 
 ## Features
 * Youtube video to audio converter using Yt-Dlp
@@ -121,4 +124,3 @@ Don't forget to give the project a star! Thanks again!
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
-
