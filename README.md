@@ -13,7 +13,7 @@
         <li>
           <a href="#installation-guide">Installation guide</a>
           <ul><li><a href="#backend">Backend</a></li></ul>
-          <ul><li><a href="#backend">Frontend</a></li></ul>
+          <ul><li><a href="#frontend">Frontend</a></li></ul>
         </li>
       </ul>
     </li>
