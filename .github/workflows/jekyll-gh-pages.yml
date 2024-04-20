@@ -14,17 +14,21 @@ jobs:
         uses: actions/checkout@master
         with:
           persist-credentials: false
-          submodules: true  # TODO remove this if not using submodules in Hexo
+          submodules: true  
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: "18.16.1"
 
       - name: Install 🔧
         run: npm --prefix ./frontend/briefme install
 
-      - name: Build 🏗️
-        run: |
-          cd ./frontend/briefme && npm clean
-          npm build
+      - name: Build
+        run: npm run build --prefix ./frontend/briefme
+        
       - name: Deploy to GH Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
-          publish_dir: public
+          publish_dir: ./frontend/briefme/build
