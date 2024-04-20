@@ -6,15 +6,12 @@ on:
       - main
 
 jobs:
-  build:
+  deploy-react-to-gh-pages:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@master
-        with:
-          persist-credentials: false
-          submodules: true  
+      - name: Checkout 
+        uses: aactions/checkout@v2  
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
