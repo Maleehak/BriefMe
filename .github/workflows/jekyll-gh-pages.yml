@@ -21,7 +21,7 @@ jobs:
 
       - name: Build 🏗️
         run: |
-          npm clean
+          cd ./frontend/briefme && npm clean
           npm build
       - name: Deploy to GH Pages 🚀
         uses: peaceiris/actions-gh-pages@v3
