@@ -1,0 +1,30 @@
+name: Deploy Frontend to Github Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@master
+        with:
+          persist-credentials: false
+          submodules: true  # TODO remove this if not using submodules in Hexo
+
+      - name: Install 🔧
+        run: npm --prefix ./frontend/briefme install
+
+      - name: Build 🏗️
+        run: |
+          npm --prefix ./frontend/briefme clean
+          npm --prefix ./frontend/briefme build
+      - name: Deploy to GH Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.SECRET_BRIEFME_WORKFLOW }}
+          publish_dir: public
