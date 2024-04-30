@@ -9,15 +9,27 @@ const Right = () => {
   const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
   const [numberOfLines, setNumberOfLines] = useState(4);
+  const [isValidURL, setisValidURL] = useState(false);
 
   const handleChange = (event) => {
-      // Handle changes in the input field
-      setInputUrl(event.target.value);
+    // Handle changes in the input field
+    let url = event.target.value;
+    setInputUrl(url);
+    // Handles input validation state
+    setisValidURL(isValidYoutubeUrl(url));
+  };
+
+  const isValidYoutubeUrl = (url) => {
+    // Regular expression for matching YouTube URLs
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+    return youtubeRegex.test(url);
   };
 
   const handleClick = () => {
-    console.log('Button clicked!');
-    fetchSummary()
+    console.log("Button clicked!");
+    if (isValidURL) {
+      fetchSummary();
+    }
   };
 
   const fetchSummary = async () => {
@@ -28,7 +40,7 @@ const Right = () => {
           video: inputUrl,
           lines: numberOfLines
         },
-      }); 
+      });
       setSummary(response.data);
     } catch (error) {
       setSummary("Unable to process request at the momemt. " +error);
@@ -43,23 +55,18 @@ const Right = () => {
 
   return (
     <div className="vertical-component-right">
-      <input
-        type="text"
-        value={inputUrl}
-        onChange={handleChange}
-        placeholder="Enter url here"
-        className="url-input-textbox" 
-      />
+      <input type="text" value={inputUrl} onChange={handleChange} placeholder="Enter url here" className="url-input-textbox" />
+      {!isValidURL && inputUrl && <p style={{ color: "red" }}>Please enter a valid YouTube URL</p>}
       <div className="selection-container">
-          <p className="selection-text">No. of lines: </p>
-          <SelectBox onSelect={handleSelect} />
+        <p className="selection-text">No. of lines: </p>
+        <SelectBox onSelect={handleSelect} />
       </div>
       <div style={{ display: "flex", width: "83%" }}>
         <button onClick={handleClick} className="submit-btn">
           Summarize
         </button>
       </div>
-    
+
       {loading && 
         <Box sx={{ width: '82%', color: 'orange' }}>
           <LinearProgress color="inherit" />
@@ -71,7 +78,7 @@ const Right = () => {
         onChange={handleChange}
         className="summary-textbox" 
       />
-    </div>
+      </div>
   );
 }
 
