@@ -62,7 +62,7 @@ const Right = () => {
         <SelectBox onSelect={handleSelect} />
       </div>
       <div style={{ display: "flex", width: "83%" }}>
-        <button onClick={handleClick} className="submit-btn">
+        <button onClick={handleClick} className="submit-btn" disabled={!isValidURL}>
           Summarize
         </button>
       </div>
