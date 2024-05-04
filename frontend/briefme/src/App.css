@@ -11,7 +11,7 @@
   z-index: 10;
   flex-direction: row;
   justify-content: space-between; 
-  padding: 60px 60px 30px;
+  padding: 0px 41px 2px;
   height: 100vh;
 
   .title{
@@ -99,8 +99,8 @@
   padding: 10px;
   font-size: 16px;
   width: 80%;
-  height: 40%;
   align-items: center;
+  height: 40vh;
 }
 
 .selection-container{
@@ -128,8 +128,28 @@ body {
 
 
 @media screen and (max-width: 767px) {
-  .vertical-component-right {
-    margin-top: 40%;
+  .vertical-container .image,
+  .vertical-container .left-footer {
+    display: none;
+  }
+  .vertical-container{
+    flex-direction: column;
+  }
+  .vertical-component-left{
+    box-shadow: none;
+    padding: 7px 33px 3px;
+    border-radius: 0;
+    border-left: 0;
+    height: fit-content;
+  }
+  .vertical-component-right{
+    height: fit-content;
+  }
+  .selection-container{
+    margin-bottom: 40px;
+  }
+  .summary-textbox{
+    margin-bottom: 40px;
   }
 }
 
