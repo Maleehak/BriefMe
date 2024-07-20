@@ -23,7 +23,7 @@ public class YoutubeVideoToTextConverterImpl implements VideoToTextConverter {
     public static final String OUTPUT_FILE = "output-";
     public static final String DOT = ".";
 
-    public static final String WEB_M = "webm";
+    public static final String MP4 = "mp4";
     public static final String SUBTITLES_FORMAT = "json3";
 
     @Override
@@ -68,11 +68,11 @@ public class YoutubeVideoToTextConverterImpl implements VideoToTextConverter {
                 log.error("Failed to download subtitles.");
             }
 
-            return outputFile + WEB_M + DOT + subtitlesLanguage + DOT + SUBTITLES_FORMAT;
+            return outputFile + MP4 + DOT + subtitlesLanguage + DOT + SUBTITLES_FORMAT;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        return outputFile + WEB_M + DOT + subtitlesLanguage + DOT + SUBTITLES_FORMAT;
+        return outputFile + MP4 + DOT + subtitlesLanguage + DOT + SUBTITLES_FORMAT;
     }
 
     @Override
